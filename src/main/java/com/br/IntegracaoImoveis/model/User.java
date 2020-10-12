@@ -7,6 +7,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -20,15 +23,20 @@ public class User {
 	private Long id;
 	
 	@Column(nullable = false)
+	@NotBlank(message = "Name should be informed") 
 	private String firstName;
 	
 	@Column(nullable = false)
+	@NotBlank(message = "lastName should be informed")
 	private String lastName;
 	
-	@Column(nullable = false)
+	@Column
+	@Email(message = "Email should be valid")
 	private String email;
 	
-	@Column(nullable = false)
+	@Column 
+	@Size(min = 5, message = "Password should be at least 5 characters")
+	@NotBlank(message = "lastName should be informed")
 	private String password;
 
 	public Long getId() {
@@ -69,6 +77,12 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+				+ ", password=" + password + "]";
 	}
 	
 	
