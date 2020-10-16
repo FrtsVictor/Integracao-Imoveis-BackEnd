@@ -8,13 +8,17 @@ public class EmailAlreadyExistsExeception extends Exception {
 	String email;
 		
 	
+	public EmailAlreadyExistsExeception(String msg) {
+		super();
+		this.msg = msg;
+	}
+	
 	public EmailAlreadyExistsExeception(String msg, String email) {
 		super();
 		this.msg = msg;
 		this.email = email;
 	}
-	
-	
+
 	public String getMsg() {
 		return msg;
 	}
@@ -27,7 +31,6 @@ public class EmailAlreadyExistsExeception extends Exception {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
 
 	
 }
