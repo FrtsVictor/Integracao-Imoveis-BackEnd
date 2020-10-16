@@ -1,6 +1,6 @@
 package com.br.IntegracaoImoveis.exceptions;
 
-public class UserNotExistsException extends Exception {
+public class UserNotExistsException extends RuntimeException {
 
 	private static final long serialVersionUID = -1667357252734994358L;
 
@@ -13,6 +13,11 @@ public class UserNotExistsException extends Exception {
 		this.id = id;
 	}
 	
+	public UserNotExistsException(String msg) {
+		super();
+		this.msg = msg;
+	}
+
 	public String getMsg() {
 		return msg;
 	}
