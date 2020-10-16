@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.validation.ConstraintViolationException;
+
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -115,12 +118,33 @@ public ResponseEntity<?> handlerResourceNotFoundException(ResourceNotFoundExcept
 	   ErrorDetails errorDetails = ErrorDetails.Builder
 			   .newBuilder()
 			   .timestamp(new Date().getTime())
-			   .detail(ex.getMessage())
+			   .detail(ex.getCause().getMessage())
 			   .developerMessage(ex.getClass().getName())
 			   .status(500)
 			   .title("Internal Server Error")
 			   .build(); 
 	   return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+   }
+   
+   @ExceptionHandler(DataIntegrityViolationException.class)
+   public final ResponseEntity<ErrorDetails> handleConstraintViolation(DataIntegrityViolationException ex,
+		   																WebRequest request)  {
+	   System.out.println("message_ " + ex.getLocalizedMessage());
+	   System.out.println("message_ " + ex.getMessage());
+	   System.out.println("cause_ " + ex.getCause());
+	   System.out.println("class_ " + ex.getClass());
+	   System.out.println("trace_ " + ex.getStackTrace());
+	   System.out.println("root_ " + ex.getRootCause());
+	   
+	   ErrorDetails errorDetails = ErrorDetails.Builder
+			   .newBuilder()
+			   .timestamp(new Date().getTime())
+			   .detail(ex.getRootCause().getMessage())
+			   .developerMessage(ex.getClass().getName())
+			   .status(401)
+			   .title(ex.getCause().getMessage())
+			   .build(); 
+	   return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
    }
    
      
