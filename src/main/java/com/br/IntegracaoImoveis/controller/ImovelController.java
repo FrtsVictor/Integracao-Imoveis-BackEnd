@@ -1,9 +1,8 @@
 package com.br.IntegracaoImoveis.controller;
 
-import javax.validation.Valid;
+import java.util.List;
 
-import com.br.IntegracaoImoveis.model.Imovel;
-import com.br.IntegracaoImoveis.repository.ImovelRepository;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -18,10 +17,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.br.IntegracaoImoveis.model.Imovel;
+import com.br.IntegracaoImoveis.repository.ImovelRepository;
+
 
 
 @RestController
-@RequestMapping("/api/imovel")
+@RequestMapping("/api/imoveis")
 public class ImovelController {
 
 	
@@ -51,8 +53,8 @@ public class ImovelController {
 	}
 	
 	@PostMapping
-	  public Imovel createImovel(@Valid @RequestBody Imovel Imovel) {
-	    return ImovelRepository.save(Imovel);
+	  public Imovel createImovel(@Valid @RequestBody Imovel imovel) {
+	    return ImovelRepository.save(imovel);
 	  }
 
 	
