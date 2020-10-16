@@ -1,26 +1,38 @@
 package com.br.IntegracaoImoveis.model;
 
+
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
 @Entity
-@Table(name = "usuario", uniqueConstraints = {
-		@UniqueConstraint(columnNames = "username"),
-		@UniqueConstraint(columnNames = "email") })
+@Table(name = "usuario"
+, uniqueConstraints = {
+		@UniqueConstraint(columnNames = "username", name = "UserName_Already_Exists"),
+		@UniqueConstraint(columnNames = "email", name = "Email_Already_Exists") })
 @EntityListeners(AuditingEntityListener.class)
 public class User {
 
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -57,14 +69,18 @@ public class User {
 	@Size(min = 5, max = 20, message = "Minimo 5 caractereres" )
 	private String username;
 
+	
 	private boolean admin;
+
+	
+	@ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name="favoritos", joinColumns= @JoinColumn(name="usuario_id"), inverseJoinColumns=  @JoinColumn(name="imoveis_id"))
+    private List<Imovel> favs;
 	
 
 	public boolean isAdmin() {
 		return admin;
 	}
-
-
 
 	public void setAdmin(boolean admin) {
 		this.admin = admin;
@@ -137,8 +153,8 @@ public class User {
 		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
 				+ ", password=" + password + ", username=" + username + ", roles=" +  "]";
 	}
-	
-	
+
+
 	
 
 }
