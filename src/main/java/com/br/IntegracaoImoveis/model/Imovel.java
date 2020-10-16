@@ -1,5 +1,7 @@
 package com.br.IntegracaoImoveis.model;
 
+import java.awt.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -7,22 +9,37 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
+
+
 @Entity
-@Table(name = "imoveis")
+@Table(name = "imoveis"
+, uniqueConstraints = {
+		@UniqueConstraint(columnNames = "id", name = "ImovelID_Already_Exists") })
+//		@UniqueConstraint(columnNames = "email", name = "Email_Already_Exists") })
 @EntityListeners(AuditingEntityListener.class)
 public class Imovel {
 	
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private String id;
+	private Long id_table;
 	
+	@Column
+	private String id;
+
+
+    private List favoritos;
+
+  
+ 
 	@Column()
 	private boolean favorito;
-	
+	 
 	@Column
 	private Integer codigoInterno;
 	
