@@ -2,7 +2,7 @@ package com.br.IntegracaoImoveis.exceptions;
 
 import java.util.Map;
 
-public class ValidationErrorDetails extends ErrorDetails {
+public class ValidationErrorDetails extends ErrorDetailsPattern {
 	
 	private String field;
 	private String fieldMessage;
@@ -21,7 +21,31 @@ public class ValidationErrorDetails extends ErrorDetails {
 	        private Map<String, String> errorDetails;
 	        
 	        
-	        private Builder() {
+	        
+	        
+	        public Builder(String field, String fieldMessage) {
+				super();
+				this.field = field;
+				this.fieldMessage = fieldMessage;
+			}
+
+			public String getField() {
+				return field;
+			}
+
+			public void setField(String field) {
+				this.field = field;
+			}
+
+			public String getFieldMessage() {
+				return fieldMessage;
+			}
+
+			public void setFieldMessage(String fieldMessage) {
+				this.fieldMessage = fieldMessage;
+			}
+
+			private Builder() {
 	        }
 
 	        public static Builder newBuilder() {
@@ -76,12 +100,28 @@ public class ValidationErrorDetails extends ErrorDetails {
 	        	validationErrorDetails.setDetail(detail);
 	        	validationErrorDetails.setTimestamp(timestamp);
 	        	validationErrorDetails.setStatus(status);
-	        	validationErrorDetails.fieldMessage = fieldMessage;
-	        	validationErrorDetails.field = field;
+	        	validationErrorDetails.setFieldMessage(fieldMessage);
+	        	validationErrorDetails.setField(field);
 	        	validationErrorDetails.errorDetails = errorDetails;
 	            return validationErrorDetails;
 	        }
 	    }
+
+		public String getFieldMessage() {
+			return fieldMessage;
+		}
+
+		public void setFieldMessage(String fieldMessage) {
+			this.fieldMessage = fieldMessage;
+		}
+
+		public String getField() {
+			return field;
+		}
+
+		public void setField(String field) {
+			this.field = field;
+		}
 	
 	
 }
