@@ -1,6 +1,7 @@
 package com.br.IntegracaoImoveis.controller;
 
-import java.util.List;
+
+import java.awt.List;
 
 import javax.validation.Valid;
 
@@ -10,10 +11,9 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,10 +25,9 @@ import com.br.IntegracaoImoveis.repository.ImovelRepository;
 @RestController
 @RequestMapping("/api/imoveis")
 public class ImovelController {
-
 	
 	@Autowired
-	ImovelRepository ImovelRepository;
+	private ImovelRepository imovelRepository;
 	
 	
 	public HttpHeaders Header() {
@@ -37,25 +36,29 @@ public class ImovelController {
 		return header;
 	}
 	
-	
 	@GetMapping
-	public ResponseEntity<?>getAllImovels(@PageableDefault(size = 10) Pageable pageable){
-		return new ResponseEntity<>(ImovelRepository.findAll(pageable), Header(), HttpStatus.OK);
+	@Transactional(rollbackFor = Exception.class )	
+	public ResponseEntity<?> getAllUsers(@PageableDefault(size = 6) Pageable pageable) {
+		return new ResponseEntity<>(imovelRepository.findAll(pageable),  HttpStatus.OK);
+	}
+	
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<Imovel> getById(@Valid @PathVariable Long id) throws Exception {
+		Imovel Imovel = imovelRepository.findById(id)
+				.orElseThrow(() -> new Exception("Imovel " + id + " not found"));
+		return new ResponseEntity<Imovel>(Imovel, Header(), HttpStatus.OK);		
 	}
 	
 
-	@GetMapping("/{id}")
-	public ResponseEntity<Imovel> getById(@Valid @PathVariable Long id) throws Exception {
-		Imovel Imovel = ImovelRepository.findById(id)
-				 .orElseThrow(() -> new Exception("Imovel " + id + " not found"));
-	    return new ResponseEntity<Imovel>(Imovel, Header(), HttpStatus.OK);
-		
+	@GetMapping("/user/{id}")
+	@Transactional(rollbackFor = Exception.class )	
+	public ResponseEntity<?> getAllByUserId(@PageableDefault(size = 10) Long id, Pageable pageable) {
+		List list = imovelRepository.imovelByUsername(id);
+		System.out.println(list);
+		return new ResponseEntity<>(list,  HttpStatus.OK);
 	}
 	
-	@PostMapping
-	  public Imovel createImovel(@Valid @RequestBody Imovel imovel) {
-	    return ImovelRepository.save(imovel);
-	  }
 
 	
 }
