@@ -1,7 +1,7 @@
 package com.br.IntegracaoImoveis.exceptions;
 
 
-public class ResourceNotFoundDetails extends ErrorDetails {
+public class ResourceNotFoundDetails extends ErrorDetailsPattern {
 
     public static final class Builder {
         private String title;
