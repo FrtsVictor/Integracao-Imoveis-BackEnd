@@ -49,7 +49,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter{
 		chain.doFilter(request, response);
 	}
 
-	
+
 	private UsernamePasswordAuthenticationToken getAuthenticationToken(HttpServletRequest request) {
 		String token = request.getHeader(HEADER_STRING);
 		if(token == null) return null;
@@ -60,7 +60,5 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter{
 		UserDetails userDetails = customUserDetailService.loadUserByUsername(username);
 		return username !=null ? new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null, userDetails.getAuthorities()) : null;
 	}
-	
-	
-	
+
 }
