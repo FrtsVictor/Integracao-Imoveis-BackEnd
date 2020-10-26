@@ -1,13 +1,17 @@
 package com.br.IntegracaoImoveis.model;
 
-import java.awt.List;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -29,126 +33,51 @@ public class Imovel {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id_table;
 	
-	@Column
+	@Column(unique = true)
 	private String id;
 
-
-    private List favoritos;
-
-  
+	private Long idUsuario;
+	
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "imoveis")
+	private Set<User> usuarios = new HashSet<>();
  
-	@Column()
 	private boolean favorito;
-	 
-	@Column
 	private Integer codigoInterno;
-	
-    @Column
     private String codigoAnuncio;
-	
-    @Column
     private String idTipo;
-	
-    @Column
     private String tipo;
-	
-    @Column
     private String tipoUrl;
-	
-    @Column
     private String endereco;
-	
-    @Column
     private String idCidade;
-	
-    @Column
     private String cidade;
-	
-    @Column
     private String cidadeUrl;
-	
-    @Column
     private Integer codigoUF;
-	
-    @Column
     private String idBairro;
-	
-    @Column
     private String bairro;
-	
-    @Column
     private String bairroUrl;
-	
-    @Column
     private String cep;
-	
-    @Column
     private String transacao;
-	
-    @Column
     private Integer dormitorios;
-	
-    @Column
     private Integer banheiros;
-	
-    @Column
     private Double valor;
-	
-    @Column
     private Double areaUtil;
-	
-    @Column
     private Double valorIPTU;
-	
-    @Column
     private Double valorCondominio;
-	
-    @Column
     private String observacoes;
-	
-    @Column
     private String descricao;
-	
-    @Column
     private String idProprietario;
-	
-    @Column
-    private String nomeProprietario;
-	
-    @Column
+    private String nomeProprietario;	
     private String idCorretor;
-	
-    @Column
     private Integer idSerialCorretor;
-	
-    @Column
     private String nomeCorretor;
-	
-    @Column
     private String urlImagem;
-	
-    @Column
     private String urlImovel;
-	
-    @Column
     private String urlYouTube;
-	
-    @Column
     private boolean exibeEndereco;
-	
-    @Column
     private boolean visivel; 
-	
-    @Column
     private boolean destaque;
-	
-    @Column
     private boolean visivelComunidadeAlterdata;
-	
-    @Column
     private boolean simulaFinanciamento;
-	
-    @Column
     private Integer numeroIPTU;
 
 	public String getId() {
@@ -161,6 +90,32 @@ public class Imovel {
 
 	public Integer getCodigoInterno() {
 		return codigoInterno;
+	}
+
+	public Long getId_table() {
+		return id_table;
+	}
+
+	public void setId_table(Long id_table) {
+		this.id_table = id_table;
+	}
+
+	public Long getIdUsuario() {
+		return idUsuario;
+	}
+
+	public void setIdUsuario(Long idUsuario) {
+		this.idUsuario = idUsuario;
+	}
+
+
+
+	public boolean isFavorito() {
+		return favorito;
+	}
+
+	public void setFavorito(boolean favorito) {
+		this.favorito = favorito;
 	}
 
 	public void setCodigoInterno(Integer codigoInterno) {
@@ -453,6 +408,37 @@ public class Imovel {
 
 	public void setNumeroIPTU(Integer numeroIPTU) {
 		this.numeroIPTU = numeroIPTU;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((id_table == null) ? 0 : id_table.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Imovel other = (Imovel) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (id_table == null) {
+			if (other.id_table != null)
+				return false;
+		} else if (!id_table.equals(other.id_table))
+			return false;
+		return true;
 	}
 	
 	
