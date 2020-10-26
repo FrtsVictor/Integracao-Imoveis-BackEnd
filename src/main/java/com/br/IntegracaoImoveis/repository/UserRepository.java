@@ -19,7 +19,13 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 	User userById(Long id);
 
 	Optional<User> findByUsername(String username);
+	
 	Boolean existsByUsername(String username);
 	Boolean existsByEmail(String email);
+
+	@Query(value = "FROM User WHERE username = ?1")
+	User userByUsername(String username);
+	
+		
 	
 }
