@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.validation.ConstraintViolationException;
-
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,18 +16,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.br.IntegracaoImoveis.exceptions.EmailAlreadyExistsExeception;
-import com.br.IntegracaoImoveis.exceptions.ErrorDetails;
-import com.br.IntegracaoImoveis.exceptions.InvalidQueryException;
+import com.br.IntegracaoImoveis.exceptions.ErrorDetailsPattern;
 import com.br.IntegracaoImoveis.exceptions.ResourceNotFoundDetails;
 import com.br.IntegracaoImoveis.exceptions.ResourceNotFoundException;
-import com.br.IntegracaoImoveis.exceptions.UserNotExistsException;
 import com.br.IntegracaoImoveis.exceptions.ValidationErrorDetails;
 
 
 @ControllerAdvice
 public class RestExceptionController extends ResponseEntityExceptionHandler  {
-
+	
 
 @ExceptionHandler(ResourceNotFoundException.class)
 public ResponseEntity<?> handlerResourceNotFoundException(ResourceNotFoundException rnfException){
@@ -68,12 +63,13 @@ public ResponseEntity<?> handlerResourceNotFoundException(ResourceNotFoundExcept
        return new ResponseEntity<>(rnfDetails, HttpStatus.BAD_REQUEST);
    }
       
+   
    @Override
    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body,
 		   														HttpHeaders headers,
 		   														HttpStatus status,
 		   														WebRequest request) {
-	   ErrorDetails errorDetails = ResourceNotFoundDetails.Builder
+	   ErrorDetailsPattern errorDetails = ResourceNotFoundDetails.Builder
 			   .newBuilder()
 				.timestamp(new Date().getTime())
 				.status(status.value())
@@ -86,8 +82,8 @@ public ResponseEntity<?> handlerResourceNotFoundException(ResourceNotFoundExcept
 
       
    @ExceptionHandler(Exception.class)
-   public final ResponseEntity<ErrorDetails> handleAllExceptions(Exception ex,  WebRequest request)  {
-	   ErrorDetails errorDetails = ErrorDetails.Builder
+   public final ResponseEntity<ErrorDetailsPattern> handleAllExceptions(Exception ex,  WebRequest request)  {
+	   ErrorDetailsPattern errorDetails = ErrorDetailsPattern.Builder
 			   .newBuilder()
 			   .timestamp(new Date().getTime())
 			   .detail(ex.getMessage())
@@ -100,8 +96,8 @@ public ResponseEntity<?> handlerResourceNotFoundException(ResourceNotFoundExcept
    
    
    @ExceptionHandler(RuntimeException.class)
-   public final ResponseEntity<ErrorDetails> handleRuntimeException(Exception ex,  WebRequest request)  {
-	   ErrorDetails errorDetails = ErrorDetails.Builder
+   public final ResponseEntity<ErrorDetailsPattern> handleRuntimeException(Exception ex,  WebRequest request)  {
+	   ErrorDetailsPattern errorDetails = ErrorDetailsPattern.Builder
 			   .newBuilder()
 			   .timestamp(new Date().getTime())
 			   .detail(ex.getMessage())
@@ -114,8 +110,8 @@ public ResponseEntity<?> handlerResourceNotFoundException(ResourceNotFoundExcept
    
       
    @ExceptionHandler(IOException.class)
-   public final ResponseEntity<ErrorDetails> handleIOException(IOException ex,  WebRequest request)  {
-	   ErrorDetails errorDetails = ErrorDetails.Builder
+   public final ResponseEntity<ErrorDetailsPattern> handleIOException(IOException ex,  WebRequest request)  {
+	   ErrorDetailsPattern errorDetails = ErrorDetailsPattern.Builder
 			   .newBuilder()
 			   .timestamp(new Date().getTime())
 			   .detail(ex.getCause().getMessage())
@@ -127,7 +123,7 @@ public ResponseEntity<?> handlerResourceNotFoundException(ResourceNotFoundExcept
    }
    
    @ExceptionHandler(DataIntegrityViolationException.class)
-   public final ResponseEntity<ErrorDetails> handleConstraintViolation(DataIntegrityViolationException ex,
+   public final ResponseEntity<ErrorDetailsPattern> handleConstraintViolation(DataIntegrityViolationException ex,
 		   																WebRequest request)  {
 	   System.out.println("message_ " + ex.getLocalizedMessage());
 	   System.out.println("message_ " + ex.getMessage());
@@ -136,7 +132,7 @@ public ResponseEntity<?> handlerResourceNotFoundException(ResourceNotFoundExcept
 	   System.out.println("trace_ " + ex.getStackTrace());
 	   System.out.println("root_ " + ex.getRootCause());
 	   
-	   ErrorDetails errorDetails = ErrorDetails.Builder
+	   ErrorDetailsPattern errorDetails = ErrorDetailsPattern.Builder
 			   .newBuilder()
 			   .timestamp(new Date().getTime())
 			   .detail(ex.getRootCause().getMessage())
@@ -146,26 +142,7 @@ public ResponseEntity<?> handlerResourceNotFoundException(ResourceNotFoundExcept
 			   .build(); 
 	   return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
    }
-   
-     
-	
-	@ExceptionHandler(InvalidQueryException.class)
-	public ResponseEntity<String> invalidQuery(InvalidQueryException exception) {
-		return ResponseEntity.badRequest().header("Error-msg", exception.getMsg()).header("Error-code", exception.getId().toString()).build();
-	}
-	
-	
-	@ExceptionHandler(UserNotExistsException.class)
-	public ResponseEntity<String> userNotExists(UserNotExistsException exception) {
-		return ResponseEntity.badRequest().header("Error-msg", exception.getMsg()).header("Error-code", exception.getId().toString()).build();
-	}
-	
-	
-	@ExceptionHandler(EmailAlreadyExistsExeception.class)
-	public ResponseEntity<String> emailAlreadyExists(EmailAlreadyExistsExeception exception) {
-		return ResponseEntity.badRequest().header("Error-msg", exception.getMsg()).header("Error-code", exception.getEmail().toString()).build();
-	}
-
+        
 
 //   @ResponseStatus(HttpStatus.FORBIDDEN)
 //	@ExceptionHandler(Exception.class)
