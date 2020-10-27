@@ -2,10 +2,13 @@ package com.br.IntegracaoImoveis.exceptions;
 
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties("field")
 public class ValidationErrorDetails extends ErrorDetailsPattern {
 	
-	private String field;
-	private String fieldMessage;
+//	private String field;
+//	private String fieldMessage;
 	
 	
 	public Map<String, String> errorDetails;
@@ -100,28 +103,28 @@ public class ValidationErrorDetails extends ErrorDetailsPattern {
 	        	validationErrorDetails.setDetail(detail);
 	        	validationErrorDetails.setTimestamp(timestamp);
 	        	validationErrorDetails.setStatus(status);
-	        	validationErrorDetails.setFieldMessage(fieldMessage);
-	        	validationErrorDetails.setField(field);
+//	        	validationErrorDetails.setFieldMessage(fieldMessage);
+//	        	validationErrorDetails.setField(field);
 	        	validationErrorDetails.errorDetails = errorDetails;
 	            return validationErrorDetails;
 	        }
 	    }
 
-		public String getFieldMessage() {
-			return fieldMessage;
-		}
-
-		public void setFieldMessage(String fieldMessage) {
-			this.fieldMessage = fieldMessage;
-		}
-
-		public String getField() {
-			return field;
-		}
-
-		public void setField(String field) {
-			this.field = field;
-		}
+//		public String getFieldMessage() {
+//			return fieldMessage;
+//		}
+//
+//		public void setFieldMessage(String fieldMessage) {
+//			this.fieldMessage = fieldMessage;
+//		}
+//
+//		public String getField() {
+//			return field;
+//		}
+//
+//		public void setField(String field) {
+//			this.field = field;
+//		}
 	
 	
 }
