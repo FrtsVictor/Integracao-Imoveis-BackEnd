@@ -2,8 +2,6 @@ package com.br.IntegracaoImoveis.controller;
 
 
 
-import java.util.Set;
-
 import javax.validation.Valid;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -24,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.br.IntegracaoImoveis.exceptions.ResourceNotFoundException;
-import com.br.IntegracaoImoveis.model.Imovel;
 import com.br.IntegracaoImoveis.model.User;
 import com.br.IntegracaoImoveis.repository.UserRepository;
 
@@ -48,6 +45,7 @@ public class UserController {
 		return new ResponseEntity<>(userRepository.findAll(pageable),  HttpStatus.OK);
 	}
 
+	
 	@GetMapping("/users/{id}")
 	@Transactional(rollbackFor = Exception.class )
 	public ResponseEntity<User> getById(@Valid @PathVariable Long id) throws Exception {
@@ -56,6 +54,7 @@ public class UserController {
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 	
+	
 	@GetMapping("/username/{username}")
 	public ResponseEntity<?> getByUsername(@PathVariable String username) {
 		User user = userRepository.userByUsername(username);
@@ -63,19 +62,7 @@ public class UserController {
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 	
-	
-	@PostMapping("/add/{id}")
-	public ResponseEntity<?> addImovel(
-									@PathVariable Long id,
-									@RequestBody Imovel imovel) {
-		User user = userRepository.userById(id);
-		Set lists = user.getImovelFavorito();
-		lists.add(imovel);
-		userRepository.save(user);
-		return new ResponseEntity<>(lists, HttpStatus.CREATED);
-	}
-	
-	
+		
 	@PostMapping("/sign-up")
 	@Transactional(rollbackFor = Exception.class )
 	public ResponseEntity<User> createUser(@Valid @RequestBody User user){
