@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,9 +24,12 @@ import com.br.IntegracaoImoveis.exceptions.ResourceNotFoundDetails;
 import com.br.IntegracaoImoveis.exceptions.ResourceNotFoundException;
 import com.br.IntegracaoImoveis.exceptions.ValidationErrorDetails;
 
-
 @ControllerAdvice
 public class RestExceptionController extends ResponseEntityExceptionHandler  {
+
+	
+	@Autowired
+	private MessageSource messageSource;
 	
 
 @ExceptionHandler(ResourceNotFoundException.class)
@@ -32,8 +38,8 @@ public ResponseEntity<?> handlerResourceNotFoundException(ResourceNotFoundExcept
 	.newBuilder()
 	.timestamp(new Date().getTime())
 	.status(HttpStatus.NOT_FOUND.value())
-	.title("Resource Not Found")
-	.detail(rnfException.getMessage())
+	.title("Busca Nao Encontrada")
+	.detail(rnfException.getMsg())
 	.developerMessage(rnfException.getClass().getName())
 	.build();
 	
@@ -49,8 +55,14 @@ public ResponseEntity<?> handlerResourceNotFoundException(ResourceNotFoundExcept
        
        Map<String, String> errors = new HashMap<>();
        
+       
        manvException.getBindingResult().getFieldErrors().forEach(error -> 
-           errors.put(error.getField(), error.getDefaultMessage()));	     
+           errors.put(error.getField(), messageSource.getMessage(error, LocaleContextHolder.getLocale())));	
+       
+//       manvException.getBindingResult().getFieldErrors().forEach(error -> 
+//       errors.put(error.getField(), error.getDefaultMessage()));	
+//       
+       
        ValidationErrorDetails rnfDetails = ValidationErrorDetails.Builder
                .newBuilder()
                .timestamp(new Date().getTime())
@@ -143,23 +155,4 @@ public ResponseEntity<?> handlerResourceNotFoundException(ResourceNotFoundExcept
 	   return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
    }
         
-
-//   @ResponseStatus(HttpStatus.FORBIDDEN)
-//	@ExceptionHandler(Exception.class)
-//	public ResponseEntity<?> handleMethodArgumentNotValid(Exception ex) {
-//	   ErrorDetails errorDetails = ErrorDetails.Builder
-//			   .newBuilder()
-//				.timestamp(new Date().getTime())
-//				.detail(ex.getMessage())
-//				.developerMessage(ex.getClass().getName())
-//				.status(500)
-//				.title("Internal Server Error")
-//				.build(); 
-//	   return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
-//	}
-//   
-      
-   
-   
-   
 }
