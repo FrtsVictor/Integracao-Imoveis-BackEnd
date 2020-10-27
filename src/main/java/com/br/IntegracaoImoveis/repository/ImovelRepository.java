@@ -1,8 +1,7 @@
 package com.br.IntegracaoImoveis.repository;
 
 
-
-import java.awt.List;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -16,7 +15,10 @@ public interface ImovelRepository extends PagingAndSortingRepository<Imovel, Lon
 	
 
 	@Query(value = "FROM Imovel WHERE idUsuario = ?1")
-	List imovelByUsername(Long idUsuario);
+	Imovel imovelById(Long idUsuario);
 	
+	Imovel findByIdImobile(String idImobile);
+	
+	 Set<Imovel> findAll();
 	
 }
