@@ -4,6 +4,7 @@ package com.br.IntegracaoImoveis.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
@@ -21,6 +22,11 @@ import javax.validation.constraints.Size;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+
 @Entity
 @Table(name = "usuarios"
 , uniqueConstraints = {
@@ -34,69 +40,49 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Size(min = 3, message = "Minimo 3 caracteres")
-	@Size(max = 50, message = "Ultrapassa 50 caracteres")
-	@NotBlank(message = "Vazio.")
+	
+	@Size(min= 3 , max = 50)
+	@NotBlank
 	private String firstName;
 
-	@Size(min = 3, message = "Minimo 3 caracteres")
-	@Size(max = 50, message = "Ultrapassa 50 caracteres")
-	@NotBlank(message = "Vazio.")
+	@Size(min = 3, max = 50)
+	@NotBlank
 	private String lastName;
 
-	@Size(min = 5, message = "Minimo 5 caracteres")
-	@Size(max = 50, message = "Ultrapassa 50 caracteres")
-	@Email(message = "Invalido.")
+	@Size(max = 80)
+	@Email
+	@NotBlank
 	private String email;
 
-	@NotBlank( message = "Vazio.")
-	@Size(min = 5, message = "Minimo 5 caractereres")
+	@NotBlank
+	@Size(min = 5)
 	private String password;
 	
-	@NotBlank( message = "Vazio.")
-	@Size(min = 5, max = 20, message = "Minimo 5 caractereres" )
+	@NotBlank
+	@Size(min = 5, max = 20)
 	private String username;
 	
 	private boolean admin;
 	
-	@ManyToMany(fetch = FetchType.EAGER)
+
+	@ManyToMany(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     @JoinTable(name="imoveis_favoritos",
     joinColumns= { @JoinColumn(name="usuarios_id") },
     inverseJoinColumns = { @JoinColumn(name="imoveis_id") })
 	private Set<Imovel> imoveis = new HashSet<>();
 	
 
-	public boolean isAdmin() {
-		return admin;
+
+	public void addImovel(Imovel imovel) {
+		this.imoveis.add(imovel);
+		imovel.getUsuarios().add(this);
 	}
-
-	public void setAdmin(boolean admin) {
-		this.admin = admin;
+	
+	
+	public void removeImovel(Imovel imovel) {
+		this.imoveis.remove(imovel);
+		imovel.getUsuarios().remove(this);
 	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public Set<Imovel> getImovelFavorito() {
-		return imoveis;
-	}
-
-	public void setImovelFavorito(Set<Imovel> imovelFavorito) {
-		this.imoveis = imovelFavorito;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-
-
-	public User() {
-		super();
-	}
-
-
 
 	public Long getId() {
 		return id;
@@ -138,13 +124,30 @@ public class User {
 		this.password = password;
 	}
 
-
-
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", password=" + password + ", username=" + username + ", roles=" +  "]";
+	public String getUsername() {
+		return username;
 	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public boolean isAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
+	}
+
+	public Set<Imovel> getImoveis() {
+		return imoveis;
+	}
+
+	public void setImoveis(Set<Imovel> imoveis) {
+		this.imoveis = imoveis;
+	}
+
 
 	@Override
 	public int hashCode() {
@@ -153,6 +156,7 @@ public class User {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
+
 
 	@Override
 	public boolean equals(Object obj) {
@@ -170,6 +174,8 @@ public class User {
 			return false;
 		return true;
 	}
+
+	
 
 
 	
