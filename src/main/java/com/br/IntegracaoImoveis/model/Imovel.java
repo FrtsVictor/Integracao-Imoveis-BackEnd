@@ -17,9 +17,11 @@ import javax.persistence.UniqueConstraint;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 
+@JsonIgnoreProperties({ "usuarios" })
 @Entity
 @Table(name = "imoveis"
 , uniqueConstraints = {
@@ -31,17 +33,14 @@ public class Imovel {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id_table;
+	private Long id;
 	
 	@Column(unique = true)
-	private String id;
-
-	private Long idUsuario;
+	private String idImobile;
 	
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "imoveis")
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "imoveis")
 	private Set<User> usuarios = new HashSet<>();
- 
-	private boolean favorito;
+	
 	private Integer codigoInterno;
     private String codigoAnuncio;
     private String idTipo;
@@ -80,42 +79,133 @@ public class Imovel {
     private boolean simulaFinanciamento;
     private Integer numeroIPTU;
 
-	public String getId() {
+
+	public void addUser(User user) {
+		this.usuarios.add(user);
+		user.getImoveis().add(this);
+	}
+	
+	
+	public void removeUser(User user) {
+		this.usuarios.remove(user);
+		user.getImoveis().remove(this);
+	}
+
+    
+
+	public Imovel() {
+		super();
+	}
+
+
+	public Imovel(String idImobile, Set<User> usuarios, Integer codigoInterno, String codigoAnuncio, String idTipo,
+			String tipo, String tipoUrl, String endereco, String idCidade, String cidade, String cidadeUrl,
+			Integer codigoUF, String idBairro, String bairro, String bairroUrl, String cep, String transacao,
+			Integer dormitorios, Integer banheiros, Double valor, Double areaUtil, Double valorIPTU,
+			Double valorCondominio, String observacoes, String descricao, String idProprietario,
+			String nomeProprietario, String idCorretor, Integer idSerialCorretor, String nomeCorretor, String urlImagem,
+			String urlImovel, String urlYouTube, boolean exibeEndereco, boolean visivel, boolean destaque,
+			boolean visivelComunidadeAlterdata, boolean simulaFinanciamento, Integer numeroIPTU) {
+		super();
+		this.idImobile = idImobile;
+		this.usuarios = usuarios;
+		this.codigoInterno = codigoInterno;
+		this.codigoAnuncio = codigoAnuncio;
+		this.idTipo = idTipo;
+		this.tipo = tipo;
+		this.tipoUrl = tipoUrl;
+		this.endereco = endereco;
+		this.idCidade = idCidade;
+		this.cidade = cidade;
+		this.cidadeUrl = cidadeUrl;
+		this.codigoUF = codigoUF;
+		this.idBairro = idBairro;
+		this.bairro = bairro;
+		this.bairroUrl = bairroUrl;
+		this.cep = cep;
+		this.transacao = transacao;
+		this.dormitorios = dormitorios;
+		this.banheiros = banheiros;
+		this.valor = valor;
+		this.areaUtil = areaUtil;
+		this.valorIPTU = valorIPTU;
+		this.valorCondominio = valorCondominio;
+		this.observacoes = observacoes;
+		this.descricao = descricao;
+		this.idProprietario = idProprietario;
+		this.nomeProprietario = nomeProprietario;
+		this.idCorretor = idCorretor;
+		this.idSerialCorretor = idSerialCorretor;
+		this.nomeCorretor = nomeCorretor;
+		this.urlImagem = urlImagem;
+		this.urlImovel = urlImovel;
+		this.urlYouTube = urlYouTube;
+		this.exibeEndereco = exibeEndereco;
+		this.visivel = visivel;
+		this.destaque = destaque;
+		this.visivelComunidadeAlterdata = visivelComunidadeAlterdata;
+		this.simulaFinanciamento = simulaFinanciamento;
+		this.numeroIPTU = numeroIPTU;
+	}
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((idImobile == null) ? 0 : idImobile.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Imovel other = (Imovel) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (idImobile == null) {
+			if (other.idImobile != null)
+				return false;
+		} else if (!idImobile.equals(other.idImobile))
+			return false;
+		return true;
+	}
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getIdImobile() {
+		return idImobile;
+	}
+
+	public void setIdImobile(String idImobile) {
+		this.idImobile = idImobile;
+	}
+
+	public Set<User> getUsuarios() {
+		return usuarios;
+	}
+
+	public void setUsuarios(Set<User> usuarios) {
+		this.usuarios = usuarios;
 	}
 
 	public Integer getCodigoInterno() {
 		return codigoInterno;
-	}
-
-	public Long getId_table() {
-		return id_table;
-	}
-
-	public void setId_table(Long id_table) {
-		this.id_table = id_table;
-	}
-
-	public Long getIdUsuario() {
-		return idUsuario;
-	}
-
-	public void setIdUsuario(Long idUsuario) {
-		this.idUsuario = idUsuario;
-	}
-
-
-
-	public boolean isFavorito() {
-		return favorito;
-	}
-
-	public void setFavorito(boolean favorito) {
-		this.favorito = favorito;
 	}
 
 	public void setCodigoInterno(Integer codigoInterno) {
@@ -410,37 +500,7 @@ public class Imovel {
 		this.numeroIPTU = numeroIPTU;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((id_table == null) ? 0 : id_table.hashCode());
-		return result;
-	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Imovel other = (Imovel) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (id_table == null) {
-			if (other.id_table != null)
-				return false;
-		} else if (!id_table.equals(other.id_table))
-			return false;
-		return true;
-	}
-	
 	
 	
 }
