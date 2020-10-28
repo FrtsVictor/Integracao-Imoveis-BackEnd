@@ -24,39 +24,10 @@ public class ImovelDTO {
     private String urlYouTube;
     private boolean destaque;
     
-	public ImovelDTO(Long id, String idImobile, String tipo, String endereco, String cidade, String bairro, String cep,
-			String transacao, Integer dormitorios, Integer banheiros, Double valor, Double areaUtil,
-			Double valorCondominio, String observacoes, String descricao, String urlImagem, String urlImovel,
-			String urlYouTube, boolean destaque) {
-		super();
-		this.id = id;
-		this.idImobile = idImobile;
-		this.tipo = tipo;
-		this.endereco = endereco;
-		this.cidade = cidade;
-		this.bairro = bairro;
-		this.cep = cep;
-		this.transacao = transacao;
-		this.dormitorios = dormitorios;
-		this.banheiros = banheiros;
-		this.valor = valor;
-		this.areaUtil = areaUtil;
-		this.valorCondominio = valorCondominio;
-		this.observacoes = observacoes;
-		this.descricao = descricao;
-		this.urlImagem = urlImagem;
-		this.urlImovel = urlImovel;
-		this.urlYouTube = urlYouTube;
-		this.destaque = destaque;
-	}
-	
-	
 	
 	public ImovelDTO() {
 		// TODO Auto-generated constructor stub
 	}
-
-
 
 	public Long getId() {
 		return id;
