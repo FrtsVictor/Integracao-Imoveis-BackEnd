@@ -22,10 +22,6 @@ import javax.validation.constraints.Size;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 
 @Entity
 @Table(name = "usuarios"
@@ -146,6 +142,11 @@ public class User {
 
 	public void setImoveis(Set<Imovel> imoveis) {
 		this.imoveis = imoveis;
+	}
+
+
+	public User() {
+		super();
 	}
 
 
