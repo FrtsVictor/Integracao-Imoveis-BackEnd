@@ -12,13 +12,11 @@ import com.br.IntegracaoImoveis.model.Imovel;
 @Repository
 public interface ImovelRepository extends PagingAndSortingRepository<Imovel, Long> {
 	
-	
-
 	@Query(value = "FROM Imovel WHERE idUsuario = ?1")
 	Imovel imovelById(Long idUsuario);
 	
 	Imovel findByIdImobile(String idImobile);
 	
-	 Set<Imovel> findAll();
+	Set<Imovel> findAll();
 	
 }
