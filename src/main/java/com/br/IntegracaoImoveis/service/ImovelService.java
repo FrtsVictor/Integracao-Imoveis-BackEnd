@@ -14,9 +14,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.br.IntegracaoImoveis.DTO.ImovelDTO;
+import com.br.IntegracaoImoveis.exceptions.ImovelAlreadyLikedException;
 import com.br.IntegracaoImoveis.exceptions.ResourceNotFoundException;
 import com.br.IntegracaoImoveis.model.Imovel;
+import com.br.IntegracaoImoveis.model.User;
 import com.br.IntegracaoImoveis.repository.UserRepository;
+
+
 
 @Component
 @Service
@@ -28,20 +32,21 @@ public class ImovelService {
 	@Autowired
 	UserRepository userRepository;
 
-	public ImovelDTO toDTOClass(Imovel imovel) {
+	public ImovelDTO imovelToDTO(Imovel imovel) {
 		return modelMapper.map(imovel, ImovelDTO.class);
 	}
 
 	public List<ImovelDTO> toDTOList(Set<Imovel> lista) {
 		Set<ImovelDTO> dtoSet = new HashSet<>();
 		for (Imovel imv : lista) {
-			ImovelDTO imvs = toDTOClass(imv);
+			ImovelDTO imvs = imovelToDTO(imv);
 			dtoSet.add(imvs);
 		}
 		List<ImovelDTO> dtoList = new ArrayList<>(dtoSet);
 		return dtoList;
 	}
 
+	
 	public Page<ImovelDTO> cretePage(Pageable pageable, List<ImovelDTO> dtoList) {
 		int start = (int) pageable.getOffset();
 		int end = (start + pageable.getPageSize()) > dtoList.size() ? dtoList.size() : (start + pageable.getPageSize());
@@ -50,9 +55,19 @@ public class ImovelService {
 		return pages;
 	}
 
+	
 	public void verifyUser(Long id) {
 		if (userRepository.userById(id) == null)
 			throw new ResourceNotFoundException("Usuario nao encontrado para id " + id);
 	}
 
+	
+	public void verifyLikedImovel(User user, Imovel imovel) {
+		if (user.getImoveis().contains(imovel)) {
+			throw new ImovelAlreadyLikedException( "Você já salvou imovel de id ", imovel.getId());
+		}		
+	}
+
+	
+	
 }
