@@ -1,13 +1,18 @@
 package com.br.IntegracaoImoveis.exceptions;
 
+import java.time.OffsetDateTime;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter @Getter
 public class ResourceNotFoundDetails extends ErrorDetailsPattern {
 
     public static final class Builder {
         private String title;
         private int status;
         private String detail;
-        private long timestamp;
+        private OffsetDateTime timestamp;
         private String developerMessage;
 
         private Builder() {
@@ -32,8 +37,8 @@ public class ResourceNotFoundDetails extends ErrorDetailsPattern {
             return this;
         }
 
-        public Builder timestamp(long timestamp) {
-            this.timestamp = timestamp;
+        public Builder timestamp(OffsetDateTime offsetDateTime) {
+            this.timestamp = offsetDateTime;
             return this;
         }
 
@@ -52,4 +57,5 @@ public class ResourceNotFoundDetails extends ErrorDetailsPattern {
             return validationErrorDetails;
         }
     }
+
 }

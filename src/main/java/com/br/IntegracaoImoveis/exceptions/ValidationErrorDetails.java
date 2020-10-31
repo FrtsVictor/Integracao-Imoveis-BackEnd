@@ -1,5 +1,6 @@
 package com.br.IntegracaoImoveis.exceptions;
 
+import java.time.OffsetDateTime;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -7,23 +8,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties("field")
 public class ValidationErrorDetails extends ErrorDetailsPattern {
 	
-//	private String field;
-//	private String fieldMessage;
-	
-	
 	public Map<String, String> errorDetails;
 	
 		public static final class Builder {
 	        private String title;
 	        private int status;
 	        private String detail;
-	        private long timestamp;
+	        private OffsetDateTime timestamp;
 	        private String developerMessage;
 	        private String field;
 	        private String fieldMessage;
 	        private Map<String, String> errorDetails;
-	        
-	        
 	        
 	        
 	        public Builder(String field, String fieldMessage) {
@@ -70,7 +65,7 @@ public class ValidationErrorDetails extends ErrorDetailsPattern {
 	            return this;
 	        }
 
-	        public Builder timestamp(long timestamp) {
+	        public Builder timestamp(OffsetDateTime timestamp) {
 	            this.timestamp = timestamp;
 	            return this;
 	        }
@@ -103,28 +98,11 @@ public class ValidationErrorDetails extends ErrorDetailsPattern {
 	        	validationErrorDetails.setDetail(detail);
 	        	validationErrorDetails.setTimestamp(timestamp);
 	        	validationErrorDetails.setStatus(status);
-//	        	validationErrorDetails.setFieldMessage(fieldMessage);
-//	        	validationErrorDetails.setField(field);
 	        	validationErrorDetails.errorDetails = errorDetails;
 	            return validationErrorDetails;
 	        }
 	    }
 
-//		public String getFieldMessage() {
-//			return fieldMessage;
-//		}
-//
-//		public void setFieldMessage(String fieldMessage) {
-//			this.fieldMessage = fieldMessage;
-//		}
-//
-//		public String getField() {
-//			return field;
-//		}
-//
-//		public void setField(String field) {
-//			this.field = field;
-//		}
-	
+
 	
 }

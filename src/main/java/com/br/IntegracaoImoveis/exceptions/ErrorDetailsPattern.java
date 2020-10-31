@@ -1,10 +1,12 @@
 package com.br.IntegracaoImoveis.exceptions;
 
+import java.time.OffsetDateTime;
+
 public class ErrorDetailsPattern {
     private String title;
     private int status;
     private String detail;
-    private long timestamp;
+    private OffsetDateTime timestamp;
     private String developerMessage;
 
 
@@ -32,12 +34,12 @@ public class ErrorDetailsPattern {
         this.detail = detail;
     }
 
-    public long getTimestamp() {
+    public OffsetDateTime getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
+    public void setTimestamp(OffsetDateTime timestamp2) {
+        this.timestamp = timestamp2;
     }
 
     public String getDeveloperMessage() {
@@ -52,7 +54,7 @@ public class ErrorDetailsPattern {
         private String title;
         private int status;
         private String detail;
-        private long timestamp;
+        private OffsetDateTime timestamp;
         private String developerMessage;
 
         private Builder() {
@@ -77,8 +79,8 @@ public class ErrorDetailsPattern {
             return this;
         }
 
-        public Builder timestamp(long timestamp) {
-            this.timestamp = timestamp;
+        public Builder timestamp(OffsetDateTime offsetDateTime) {
+            this.timestamp = offsetDateTime;
             return this;
         }
 
