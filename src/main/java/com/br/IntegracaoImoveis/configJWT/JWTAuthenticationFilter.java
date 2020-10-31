@@ -46,33 +46,23 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			} catch (IOException e) {	
 				throw new RuntimeException(e);
 			}
-	}
+			}
 
 	
 	@Override
-	protected void successfulAuthentication(HttpServletRequest request,
-											HttpServletResponse response,
-											FilterChain chain,
-											Authentication authResult
-											) throws IOException, ServletException {
+	protected void successfulAuthentication(
+			HttpServletRequest request,
+			HttpServletResponse response,
+			FilterChain chain,
+			Authentication authResult) throws IOException, ServletException {
 		String username = ((org.springframework.security.core.userdetails.User) authResult.getPrincipal()).getUsername();		
 		String token = Jwts
 				.builder()
 				.setSubject(username)
 				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
 				.signWith(SignatureAlgorithm.HS512, SECRET)
-				.compact();		
-		
-//		AuthenticatedUser authUser = AuthenticatedUser.builder()
-//				.Message("Bem vindo a IntegracaoImoveis Rest API! :)")
-//				.Username(username)
-//				.AuthenticationType("Bearer")
-//				.Token(token)
-//				.Expiratation("24hrs")
-//				.Role(authResult.getAuthorities().toString())
-//				.build();
+				.compact();	
 		String bearerToken = TOKEN_PREFIX + token;
-		
 		response.getWriter().append(token);
 		response.addHeader(HEADER_STRING, bearerToken);
 	}

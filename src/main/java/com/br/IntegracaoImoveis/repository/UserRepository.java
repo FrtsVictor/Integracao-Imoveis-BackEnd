@@ -9,12 +9,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import com.br.IntegracaoImoveis.DTO.ImovelDTO;
 import com.br.IntegracaoImoveis.model.User;
 
 @Repository
 public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 
-	@Query(value = "FROM User WHERE email = ?1")
 	User userByEmail(String email);
 
 	@Query(value = "FROM User WHERE id = ?1")
@@ -31,9 +31,6 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 
 	Page<?> findAllById(Long id, Pageable pageable);
 
-	Page<?> findAllByImoveis(Pageable pageable);
-
-//	@Query(value = "select i.* from imoveis_favoritos f join imoveis i on i.id = f.imoveis_id where f.usuarios_id = ?1",  nativeQuery = true)
-//	Page<?>usuarioImoveis(Long id, Pageable pageable);
+	Page<ImovelDTO> findAllByImoveis(Pageable pageable);
 
 }
