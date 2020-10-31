@@ -3,6 +3,8 @@ package com.br.IntegracaoImoveis.configJWT;
 
 import static com.br.IntegracaoImoveis.configJWT.SecurityConstants.SIGN_UP_URL;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +17,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsConfigurationSource;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
 import com.br.IntegracaoImoveis.service.CustomUserDetailService;
 
@@ -25,8 +29,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private CustomUserDetailService customUserDetailService;
-	
-	
+//	http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
@@ -40,6 +43,25 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       .addFilter(new JWTAuthenticationFilter(authenticationManager()))
       .addFilter(new JWTAuthorizationFilter(authenticationManager(), customUserDetailService));
 	}
+	
+	
+	
+//	___________________
+	 @Bean
+	    CorsConfigurationSource corsConfigurationSource() {
+	        final CorsConfiguration configuration = new CorsConfiguration();
+	        configuration.setAllowedOrigins(Arrays.asList("*"));
+	        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT","HEAD", "OPTIONS", "DELETE"));
+	        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+	        source.registerCorsConfiguration("/**", configuration);
+	        return source;
+	    }
+
+//		CorsConfiguration crf = new CorsConfiguration();
+//		crf.setAllowedOrigins(Arrays.asList("*"));
+//		crf.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"));
+
+	 
 	
 	
 	@Bean
