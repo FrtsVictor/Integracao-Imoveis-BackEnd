@@ -15,8 +15,6 @@ import com.br.IntegracaoImoveis.model.User;
 @Repository
 public interface UserRepository extends PagingAndSortingRepository<User, Long> {
 
-	User userByEmail(String email);
-
 	@Query(value = "FROM User WHERE id = ?1")
 	User userById(Long id);
 
